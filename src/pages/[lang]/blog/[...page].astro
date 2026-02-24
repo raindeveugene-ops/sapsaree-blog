@@ -7,21 +7,35 @@ import CategoryFilter from '../../../components/CategoryFilter.astro';
 import Footer from '../../../components/Footer.astro';
 import FormattedDate from '../../../components/FormattedDate.astro';
 import Header from '../../../components/Header.astro';
+import Pagination from '../../../components/Pagination.astro';
 import type { Lang, Category } from '../../../consts';
 import { getSiteTitle, getSiteDescription } from '../../../consts';
 import { t } from '../../../i18n/utils';
+import type { GetStaticPaths } from 'astro';
 
-export function getStaticPaths() {
-	return [{ params: { lang: 'ko' } }, { params: { lang: 'en' } }];
-}
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+	const allPosts = await getCollection('blog');
+	const langs: Lang[] = ['ko', 'en'];
+	const routes: any[] = [];
+
+	for (const lang of langs) {
+		const langPosts = allPosts
+			.filter((p) => p.data.lang === lang)
+			.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+		routes.push(
+			...paginate(langPosts, {
+				params: { lang },
+				pageSize: 6,
+			})
+		);
+	}
+
+	return routes;
+};
 
 const { lang } = Astro.params as { lang: Lang };
-const category = Astro.url.searchParams.get('category');
-
-const posts = (await getCollection('blog'))
-	.filter((p) => p.data.lang === lang)
-	.filter((p) => !category || p.data.category === category)
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const { page } = Astro.props;
 ---
 
 <!doctype html>
@@ -78,7 +92,6 @@ const posts = (await getCollection('blog'))
 				margin: 0;
 				color: var(--text-muted);
 			}
-			/* category badge styles moved to CategoryBadge component */
 			ul li a:hover h4,
 			ul li a:hover .date {
 				color: var(--accent);
@@ -90,6 +103,9 @@ const posts = (await getCollection('blog'))
 				text-align: center;
 				color: var(--text-muted);
 				padding: 3em 0;
+			}
+			[data-posts] li[hidden] {
+				display: none;
 			}
 			@media (max-width: 720px) {
 				ul {
@@ -112,12 +128,12 @@ const posts = (await getCollection('blog'))
 		<Header {lang} />
 		<main>
 			<h1>{t(lang, 'nav.blog')}</h1>
-			<CategoryFilter {lang} current={category ?? undefined} />
-			{posts.length > 0 ? (
+			<CategoryFilter {lang} />
+			{page.data.length > 0 ? (
 				<section>
-					<ul>
-						{posts.map((post) => (
-							<li>
+					<ul data-posts>
+						{page.data.map((post: any) => (
+							<li data-category={post.data.category}>
 								<a href={`/${lang}/blog/${post.id}/`}>
 									{post.data.heroImage && (
 										<Image width={720} height={360} src={post.data.heroImage} alt="" />
@@ -135,7 +151,46 @@ const posts = (await getCollection('blog'))
 			) : (
 				<p class="empty">{lang === 'ko' ? '아직 작성된 글이 없습니다.' : 'No posts yet.'}</p>
 			)}
+			<Pagination {page} />
 		</main>
 		<Footer {lang} />
+		<script>
+			function initCategoryFilter() {
+				const params = new URLSearchParams(window.location.search);
+				const category = params.get('category');
+				const items = document.querySelectorAll<HTMLLIElement>('[data-posts] li[data-category]');
+				const links = document.querySelectorAll<HTMLAnchorElement>('.category-filter a');
+
+				// Filter posts
+				items.forEach((li) => {
+					if (!category || li.dataset.category === category) {
+						li.hidden = false;
+					} else {
+						li.hidden = true;
+					}
+				});
+
+				// Highlight active link
+				links.forEach((a) => {
+					const url = new URL(a.href);
+					const linkCat = url.searchParams.get('category');
+					a.classList.toggle('active', linkCat === category || (!linkCat && !category));
+				});
+
+				// Show empty message if all filtered out
+				const visible = document.querySelectorAll('[data-posts] li:not([hidden])');
+				const emptyEl = document.querySelector('.empty');
+				if (visible.length === 0 && !emptyEl) {
+					const ul = document.querySelector('[data-posts]');
+					if (ul) {
+						const p = document.createElement('p');
+						p.className = 'empty';
+						p.textContent = document.documentElement.lang === 'ko' ? '해당 카테고리에 글이 없습니다.' : 'No posts in this category.';
+						ul.parentElement?.appendChild(p);
+					}
+				}
+			}
+			initCategoryFilter();
+		</script>
 	</body>
 </html>

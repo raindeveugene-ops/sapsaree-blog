@@ -1,0 +1,55 @@
+---
+interface Props {
+	page: {
+		url: { prev?: string; next?: string };
+		currentPage: number;
+		lastPage: number;
+	};
+}
+
+const { page } = Astro.props;
+---
+
+{page.lastPage > 1 && (
+	<nav class="pagination" aria-label="Pagination">
+		{page.url.prev ? (
+			<a href={page.url.prev} class="prev">← 이전</a>
+		) : (
+			<span class="prev disabled">← 이전</span>
+		)}
+		<span class="current">{page.currentPage} / {page.lastPage}</span>
+		{page.url.next ? (
+			<a href={page.url.next} class="next">다음 →</a>
+		) : (
+			<span class="next disabled">다음 →</span>
+		)}
+	</nav>
+)}
+
+<style>
+	.pagination {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 1.5rem;
+		margin-top: 3rem;
+		padding: 1rem 0;
+	}
+	a {
+		color: var(--accent);
+		text-decoration: none;
+		font-weight: 500;
+		transition: opacity 0.2s;
+	}
+	a:hover {
+		opacity: 0.7;
+	}
+	.current {
+		color: var(--text-muted);
+		font-size: 0.9em;
+	}
+	.disabled {
+		color: var(--text-muted);
+		opacity: 0.4;
+	}
+</style>

@@ -4,10 +4,9 @@ import { t } from '../i18n/utils';
 
 interface Props {
 	lang: Lang;
-	current?: string;
 }
 
-const { lang, current } = Astro.props;
+const { lang } = Astro.props;
 
 const categoryKeys: Record<Category, string> = {
 	travel: 'blog.travel',
@@ -18,16 +17,13 @@ const categoryKeys: Record<Category, string> = {
 ---
 
 <nav class="category-filter" aria-label="Category filter">
-	<a
-		href={`/${lang}/blog/`}
-		class:list={[{ active: !current }]}
-	>
+	<a href={`/${lang}/blog/`}>
 		{t(lang, 'blog.allCategories')}
 	</a>
 	{CATEGORIES.map((cat) => (
 		<a
 			href={`/${lang}/blog/?category=${cat}`}
-			class:list={[`cat-${cat}`, { active: current === cat }]}
+			class={`cat-${cat}`}
 		>
 			{t(lang, categoryKeys[cat] as any)}
 		</a>
