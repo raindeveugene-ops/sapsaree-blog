@@ -1,0 +1,31 @@
+---
+import type { Lang, Category } from '../consts';
+import { t } from '../i18n/utils';
+
+interface Props {
+	category: Category;
+	lang: Lang;
+}
+
+const { category, lang } = Astro.props;
+---
+
+<span class:list={['category-badge', `cat-${category}`]}>
+	{t(lang, `blog.${category}` as any)}
+</span>
+
+<style>
+	.category-badge {
+		display: inline-block;
+		padding: 0.2em 0.6em;
+		color: white;
+		border-radius: 4px;
+		font-size: 0.75em;
+		font-weight: 600;
+		margin-top: 0.3em;
+	}
+	.cat-travel { background-color: var(--cat-travel); }
+	.cat-parenting { background-color: var(--cat-parenting); }
+	.cat-review { background-color: var(--cat-review); }
+	.cat-tech { background-color: var(--cat-tech); }
+</style>

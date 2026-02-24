@@ -1,0 +1,152 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import CategoryBadge from '../../components/CategoryBadge.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import type { Lang, Category } from '../../consts';
+import { getSiteTitle, getSiteDescription } from '../../consts';
+
+export function getStaticPaths() {
+	return [{ params: { lang: 'ko' } }, { params: { lang: 'en' } }];
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const siteTitle = getSiteTitle(lang);
+const siteDescription = getSiteDescription(lang);
+
+const posts = (await getCollection('blog'))
+	.filter((p) => p.data.lang === lang)
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 4);
+---
+
+<!doctype html>
+<html lang={lang}>
+	<head>
+		<BaseHead title={siteTitle} description={siteDescription} {lang} />
+	</head>
+	<body>
+		<Header {lang} />
+		<main>
+			<section class="hero">
+				<div class="hero-inner">
+					<h1>{siteTitle}</h1>
+					<p>{siteDescription}</p>
+				</div>
+			</section>
+			{posts.length > 0 && (
+				<section class="recent-posts">
+					<h2>{lang === 'ko' ? '최근 글' : 'Recent Posts'}</h2>
+					<ul>
+						{posts.map((post) => (
+							<li>
+								<a href={`/${lang}/blog/${post.id}/`}>
+									{post.data.heroImage && (
+										<Image width={720} height={360} src={post.data.heroImage} alt="" />
+									)}
+									<div class="post-meta">
+										<CategoryBadge category={post.data.category as Category} {lang} />
+										<h4 class="title">{post.data.title}</h4>
+										<p class="date">
+											<FormattedDate date={post.data.pubDate} {lang} />
+										</p>
+									</div>
+								</a>
+							</li>
+						))}
+					</ul>
+				</section>
+			)}
+		</main>
+		<Footer {lang} />
+	</body>
+</html>
+<style>
+	.hero {
+		text-align: center;
+		margin-bottom: 2em;
+		padding: 3em 1em;
+		background: linear-gradient(135deg, rgba(35, 55, 255, 0.08) 0%, rgba(91, 109, 255, 0.04) 50%, rgba(236, 72, 153, 0.06) 100%);
+		border-radius: 16px;
+		position: relative;
+		overflow: hidden;
+	}
+	:global(html.dark) .hero {
+		background: linear-gradient(135deg, rgba(91, 109, 255, 0.15) 0%, rgba(91, 109, 255, 0.05) 50%, rgba(236, 72, 153, 0.1) 100%);
+	}
+	.hero-inner {
+		position: relative;
+		z-index: 1;
+	}
+	.hero h1 {
+		font-size: 2.8em;
+		margin-bottom: 0.25em;
+		background: linear-gradient(135deg, var(--accent) 0%, #ec4899 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+	.hero p {
+		color: var(--text-muted);
+		font-size: 1.2em;
+		margin: 0;
+	}
+	.recent-posts h2 {
+		margin-bottom: 1em;
+	}
+	ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 2rem;
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+	}
+	ul li {
+		width: calc(50% - 1rem);
+	}
+	ul li * {
+		text-decoration: none;
+		transition: 0.2s ease;
+	}
+	ul li img {
+		margin-bottom: 0.5rem;
+		border-radius: 12px;
+	}
+	ul li a {
+		display: block;
+	}
+	.post-meta {
+		display: flex;
+		flex-direction: column;
+		gap: 0.2em;
+	}
+	.title {
+		margin: 0;
+		color: var(--text);
+		line-height: 1.3;
+	}
+	.date {
+		margin: 0;
+		color: var(--text-muted);
+	}
+	ul li a:hover h4,
+	ul li a:hover .date {
+		color: var(--accent);
+	}
+	ul a:hover img {
+		box-shadow: var(--box-shadow);
+	}
+	@media (max-width: 720px) {
+		ul li {
+			width: 100%;
+			text-align: center;
+		}
+		.hero h1 {
+			font-size: 2em;
+		}
+	}
+</style>

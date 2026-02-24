@@ -1,0 +1,5 @@
+name = "sapsalog"
+compatibility_date = "2026-02-23"
+
+[site]
+bucket = "./dist"

@@ -1,0 +1,29 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import BlogPost from '../../../layouts/BlogPost.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	return posts.map((post) => ({
+		params: { lang: post.data.lang, slug: post.id },
+		props: { post, allPosts: posts },
+	}));
+}
+
+const { post, allPosts } = Astro.props;
+const { Content } = await render(post);
+const lang = post.data.lang;
+
+// Get prev/next posts in same language, sorted by date
+const sameLangPosts = allPosts
+	.filter((p: CollectionEntry<'blog'>) => p.data.lang === lang)
+	.sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const currentIndex = sameLangPosts.findIndex((p: CollectionEntry<'blog'>) => p.id === post.id);
+const prevPost = currentIndex < sameLangPosts.length - 1 ? sameLangPosts[currentIndex + 1] : null;
+const nextPost = currentIndex > 0 ? sameLangPosts[currentIndex - 1] : null;
+---
+
+<BlogPost {...post.data} lang={lang} tags={post.data.tags} prevPost={prevPost} nextPost={nextPost}>
+	<Content />
+</BlogPost>

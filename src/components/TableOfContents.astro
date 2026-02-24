@@ -1,0 +1,93 @@
+---
+import type { Lang } from '../consts';
+import { t } from '../i18n/utils';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+
+<nav class="toc" aria-label="Table of contents">
+	<details open>
+		<summary><strong>{t(lang, 'blog.toc')}</strong></summary>
+		<div id="toc-list"></div>
+	</details>
+</nav>
+
+<style>
+	.toc {
+		background: var(--bg-hover);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		padding: 1em 1.2em;
+		margin-bottom: 2em;
+	}
+	summary {
+		cursor: pointer;
+		list-style: none;
+	}
+	summary::-webkit-details-marker { display: none; }
+	summary::before {
+		content: '▸ ';
+	}
+	details[open] summary::before {
+		content: '▾ ';
+	}
+	:global(.toc-list) {
+		margin-top: 0.5em;
+		padding-left: 0;
+		list-style: none;
+	}
+	:global(.toc-list li) {
+		margin: 0.3em 0;
+	}
+	:global(.toc-list li a) {
+		text-decoration: none;
+		color: var(--text-muted);
+		font-size: 0.9em;
+		transition: color 0.2s;
+	}
+	:global(.toc-list li a:hover) {
+		color: var(--accent);
+	}
+	:global(.toc-list .toc-h3) {
+		padding-left: 1em;
+	}
+	:global(.toc-list .toc-h4) {
+		padding-left: 2em;
+	}
+</style>
+
+<script>
+	function buildToc() {
+		const tocList = document.getElementById('toc-list');
+		if (!tocList) return;
+		const prose = document.querySelector('.prose');
+		if (!prose) return;
+		const headings = prose.querySelectorAll('h2, h3, h4');
+		if (headings.length === 0) {
+			const tocNav = document.querySelector('.toc');
+			if (tocNav) tocNav.style.display = 'none';
+			return;
+		}
+		const ul = document.createElement('ul');
+		ul.className = 'toc-list';
+		headings.forEach((h) => {
+			if (!h.id) {
+				h.id = h.textContent?.trim().toLowerCase().replace(/[^a-z0-9가-힣]+/g, '-').replace(/(^-|-$)/g, '') || '';
+			}
+			const li = document.createElement('li');
+			li.className = `toc-${h.tagName.toLowerCase()}`;
+			const a = document.createElement('a');
+			a.href = `#${h.id}`;
+			a.textContent = h.textContent || '';
+			li.appendChild(a);
+			ul.appendChild(li);
+		});
+		tocList.appendChild(ul);
+	}
+	buildToc();
+	document.addEventListener('astro:after-swap', buildToc);
+</script>

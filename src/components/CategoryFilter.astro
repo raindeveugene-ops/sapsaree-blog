@@ -1,0 +1,81 @@
+---
+import { CATEGORIES, type Lang, type Category } from '../consts';
+import { t } from '../i18n/utils';
+
+interface Props {
+	lang: Lang;
+	current?: string;
+}
+
+const { lang, current } = Astro.props;
+
+const categoryKeys: Record<Category, string> = {
+	travel: 'blog.travel',
+	parenting: 'blog.parenting',
+	review: 'blog.review',
+	tech: 'blog.tech',
+};
+---
+
+<nav class="category-filter" aria-label="Category filter">
+	<a
+		href={`/${lang}/blog/`}
+		class:list={[{ active: !current }]}
+	>
+		{t(lang, 'blog.allCategories')}
+	</a>
+	{CATEGORIES.map((cat) => (
+		<a
+			href={`/${lang}/blog/?category=${cat}`}
+			class:list={[`cat-${cat}`, { active: current === cat }]}
+		>
+			{t(lang, categoryKeys[cat] as any)}
+		</a>
+	))}
+</nav>
+
+<style>
+	.category-filter {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5em;
+		margin-bottom: 2em;
+	}
+	a {
+		padding: 0.4em 0.8em;
+		border: 1px solid var(--border);
+		border-radius: 20px;
+		text-decoration: none;
+		color: var(--text);
+		font-size: 0.85em;
+		transition: all 0.2s;
+	}
+	a:hover {
+		background-color: var(--bg-hover);
+	}
+	a.active {
+		color: white;
+		border-color: var(--accent);
+		background-color: var(--accent);
+	}
+	a.cat-travel.active {
+		background-color: var(--cat-travel);
+		border-color: var(--cat-travel);
+	}
+	a.cat-parenting.active {
+		background-color: var(--cat-parenting);
+		border-color: var(--cat-parenting);
+	}
+	a.cat-review.active {
+		background-color: var(--cat-review);
+		border-color: var(--cat-review);
+	}
+	a.cat-tech.active {
+		background-color: var(--cat-tech);
+		border-color: var(--cat-tech);
+	}
+	a.cat-travel:not(.active) { color: var(--cat-travel); border-color: var(--cat-travel); }
+	a.cat-parenting:not(.active) { color: var(--cat-parenting); border-color: var(--cat-parenting); }
+	a.cat-review:not(.active) { color: var(--cat-review); border-color: var(--cat-review); }
+	a.cat-tech:not(.active) { color: var(--cat-tech); border-color: var(--cat-tech); }
+</style>

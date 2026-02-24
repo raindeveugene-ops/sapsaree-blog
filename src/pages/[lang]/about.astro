@@ -1,0 +1,155 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import type { Lang } from '../../consts';
+import { getSiteTitle } from '../../consts';
+import { t } from '../../i18n/utils';
+
+export function getStaticPaths() {
+	return [{ params: { lang: 'ko' } }, { params: { lang: 'en' } }];
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const title = lang === 'ko' ? '소개' : 'About';
+const siteTitle = getSiteTitle(lang);
+
+const interests = [
+	'about.interest.travel',
+	'about.interest.parenting',
+	'about.interest.review',
+	'about.interest.tech',
+	'about.interest.cooking',
+	'about.interest.reading',
+] as const;
+---
+
+<!doctype html>
+<html lang={lang}>
+	<head>
+		<BaseHead title={`${title} - ${siteTitle}`} description={title} {lang} />
+		<style>
+			.about {
+				width: 720px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 1em;
+				color: var(--text);
+			}
+			.profile-section {
+				display: flex;
+				align-items: center;
+				gap: 2em;
+				margin-bottom: 2em;
+				padding: 2em;
+				background: var(--bg-hover);
+				border-radius: 16px;
+			}
+			.avatar {
+				width: 120px;
+				height: 120px;
+				border-radius: 50%;
+				background: linear-gradient(135deg, var(--accent), #ec4899);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 3em;
+				flex-shrink: 0;
+			}
+			.profile-info h1 {
+				margin: 0 0 0.3em 0;
+				font-size: 1.8em;
+			}
+			.profile-info p {
+				margin: 0;
+				color: var(--text-muted);
+				line-height: 1.6;
+			}
+			.social-links {
+				display: flex;
+				gap: 0.8em;
+				margin-top: 1em;
+			}
+			.social-links a {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.3em;
+				padding: 0.4em 0.8em;
+				border: 1px solid var(--border);
+				border-radius: 8px;
+				text-decoration: none;
+				color: var(--text-muted);
+				font-size: 0.85em;
+				transition: all 0.2s;
+			}
+			.social-links a:hover {
+				border-color: var(--accent);
+				color: var(--accent);
+				background: var(--bg-hover);
+			}
+			.interests-section {
+				margin-top: 2em;
+			}
+			.interests-section h2 {
+				margin-bottom: 1em;
+			}
+			.interest-tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.6em;
+			}
+			.interest-tag {
+				padding: 0.5em 1em;
+				background: var(--bg-hover);
+				border: 1px solid var(--border);
+				border-radius: 20px;
+				font-size: 0.95em;
+				transition: all 0.2s;
+			}
+			.interest-tag:hover {
+				border-color: var(--accent);
+				background: rgba(35, 55, 255, 0.08);
+			}
+			@media (max-width: 720px) {
+				.profile-section {
+					flex-direction: column;
+					text-align: center;
+				}
+				.social-links {
+					justify-content: center;
+				}
+				.interest-tags {
+					justify-content: center;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header {lang} />
+		<main>
+			<div class="about">
+				<section class="profile-section">
+					<div class="avatar">🐕</div>
+					<div class="profile-info">
+						<h1>{t(lang, 'about.title')}</h1>
+						<p>{t(lang, 'about.description')}</p>
+						<div class="social-links">
+							<a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+							<a href="/rss.xml" target="_blank">RSS</a>
+						</div>
+					</div>
+				</section>
+
+				<section class="interests-section">
+					<h2>{t(lang, 'about.interests')}</h2>
+					<div class="interest-tags">
+						{interests.map((key) => (
+							<span class="interest-tag">{t(lang, key as any)}</span>
+						))}
+					</div>
+				</section>
+			</div>
+		</main>
+		<Footer {lang} />
+	</body>
+</html>

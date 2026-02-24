@@ -1,0 +1,92 @@
+---
+import type { Lang } from '../consts';
+import { getSiteTitle } from '../consts';
+import { t, getOtherLang, switchLangInUrl } from '../i18n/utils';
+import HeaderLink from './HeaderLink.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+	lang?: Lang;
+}
+
+const { lang = 'ko' } = Astro.props;
+const siteTitle = getSiteTitle(lang);
+const otherLang = getOtherLang(lang);
+const switchUrl = switchLangInUrl(Astro.url, otherLang);
+---
+
+<header>
+	<nav>
+		<h2><a href={`/${lang}/`}>{siteTitle}</a></h2>
+		<div class="internal-links">
+			<HeaderLink href={`/${lang}/`}>{t(lang, 'nav.home')}</HeaderLink>
+			<HeaderLink href={`/${lang}/blog/`}>{t(lang, 'nav.blog')}</HeaderLink>
+			<HeaderLink href={`/${lang}/about/`}>{t(lang, 'nav.about')}</HeaderLink>
+		</div>
+		<div class="header-right">
+			<ThemeToggle {lang} />
+			<a
+				href={switchUrl}
+				class="lang-switch"
+				aria-label={t(lang, 'lang.switchLabel')}
+			>
+				{t(lang, 'lang.switch')}
+			</a>
+		</div>
+	</nav>
+</header>
+<style>
+	header {
+		margin: 0;
+		padding: 0 1em;
+		background: var(--bg-header);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	}
+	h2 {
+		margin: 0;
+		font-size: 1em;
+	}
+	h2 a,
+	h2 a.active {
+		text-decoration: none;
+	}
+	nav {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		max-width: 960px;
+		margin: 0 auto;
+	}
+	nav a {
+		padding: 1em 0.5em;
+		color: var(--text);
+		border-bottom: 4px solid transparent;
+		text-decoration: none;
+	}
+	nav a.active {
+		text-decoration: none;
+		border-bottom-color: var(--accent);
+	}
+	.header-right {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+	}
+	.lang-switch {
+		padding: 0.3em 0.6em !important;
+		border: 1px solid var(--border) !important;
+		border-radius: 4px;
+		font-size: 0.85em;
+		font-weight: 600;
+		transition: background-color 0.2s;
+	}
+	.lang-switch:hover {
+		background-color: var(--bg-hover);
+	}
+	@media (max-width: 720px) {
+		nav {
+			flex-wrap: wrap;
+			gap: 0.25em;
+		}
+	}
+</style>

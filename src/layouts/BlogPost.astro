@@ -1,0 +1,138 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import CategoryBadge from '../components/CategoryBadge.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import PostNavigation from '../components/PostNavigation.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import AdSense from '../components/AdSense.astro';
+import type { Lang, Category } from '../consts';
+import { t } from '../i18n/utils';
+
+type Props = CollectionEntry<'blog'>['data'] & {
+	lang?: Lang;
+	tags?: string[];
+	prevPost?: CollectionEntry<'blog'> | null;
+	nextPost?: CollectionEntry<'blog'> | null;
+};
+
+const { title, description, pubDate, updatedDate, heroImage, category, lang = 'ko', tags = [], prevPost, nextPost } = Astro.props;
+---
+
+<html lang={lang}>
+	<head>
+		<BaseHead title={title} description={description} image={heroImage} lang={lang} />
+		<style>
+			main {
+				width: calc(100% - 2em);
+				max-width: 100%;
+				margin: 0;
+			}
+			.hero-image {
+				width: 100%;
+			}
+			.hero-image img {
+				display: block;
+				margin: 0 auto;
+				border-radius: 12px;
+				box-shadow: var(--box-shadow);
+			}
+			.prose {
+				width: 720px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 1em;
+				color: var(--text);
+			}
+			.title {
+				margin-bottom: 1em;
+				padding: 1em 0;
+				text-align: center;
+				line-height: 1;
+			}
+			.title h1 {
+				margin: 0 0 0.5em 0;
+			}
+			.date {
+				margin-bottom: 0.5em;
+				color: var(--text-muted);
+			}
+			.last-updated-on {
+				font-style: italic;
+			}
+			.tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5em;
+				margin-top: 2em;
+				padding-top: 1em;
+				border-top: 1px solid var(--border);
+			}
+			.tags-label {
+				font-size: 0.85em;
+				color: var(--text-muted);
+				font-weight: 600;
+				margin-right: 0.3em;
+			}
+			.tag {
+				display: inline-block;
+				padding: 0.2em 0.6em;
+				background: var(--bg-hover);
+				border: 1px solid var(--border);
+				border-radius: 4px;
+				font-size: 0.8em;
+				color: var(--text-muted);
+				text-decoration: none;
+				transition: all 0.2s;
+			}
+			.tag:hover {
+				color: var(--accent);
+				border-color: var(--accent);
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header {lang} />
+		<main>
+			<article>
+				<div class="hero-image">
+					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
+				</div>
+				<div class="prose">
+					<div class="title">
+						<div class="date">
+							<FormattedDate date={pubDate} {lang} />
+							{
+								updatedDate && (
+									<div class="last-updated-on">
+										Last updated on <FormattedDate date={updatedDate} {lang} />
+									</div>
+								)
+							}
+						</div>
+						<h1>{title}</h1>
+						{category && <CategoryBadge category={category as Category} {lang} />}
+						<hr />
+					</div>
+					<TableOfContents {lang} />
+					<slot />
+					{tags.length > 0 && (
+						<div class="tags">
+							<span class="tags-label">{t(lang, 'blog.tags')}:</span>
+							{tags.map((tag) => (
+								<span class="tag">#{tag}</span>
+							))}
+						</div>
+					)}
+					<PostNavigation {lang} prevPost={prevPost} nextPost={nextPost} />
+					<AdSense slot="in-article" />
+				</div>
+			</article>
+		</main>
+		<Footer {lang} />
+	</body>
+</html>
