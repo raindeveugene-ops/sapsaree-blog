@@ -10,12 +10,19 @@ interface Props {
 	description: string;
 	image?: ImageMetadata;
 	lang?: Lang;
+	translationSlug?: string;
+	pubDate?: Date;
+	updatedDate?: Date;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage, lang = 'ko' } = Astro.props;
+const { title, description, image = FallbackImage, lang = 'ko', translationSlug, pubDate, updatedDate } = Astro.props;
 const siteTitle = getSiteTitle(lang);
+const otherLang = lang === 'ko' ? 'en' : 'ko';
+const altUrl = translationSlug
+	? new URL(`/${otherLang}/blog/${translationSlug}/`, Astro.site)
+	: null;
 ---
 
 <!-- Global Metadata -->
@@ -43,6 +50,11 @@ const siteTitle = getSiteTitle(lang);
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 
+<!-- Hreflang -->
+<link rel="alternate" hreflang={lang} href={canonicalURL} />
+{altUrl && <link rel="alternate" hreflang={otherLang} href={altUrl} />}
+<link rel="alternate" hreflang="x-default" href={new URL(Astro.url.pathname.replace(/^\/(ko|en)/, '/ko'), Astro.site)} />
+
 <!-- Primary Meta Tags -->
 <title>{title}</title>
 <meta name="title" content={title} />
@@ -62,6 +74,29 @@ const siteTitle = getSiteTitle(lang);
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image.src, Astro.url)} />
+
+<!-- JSON-LD Structured Data (Article) -->
+{pubDate && (
+	<script type="application/ld+json" set:html={JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "BlogPosting",
+		"headline": title,
+		"description": description,
+		"image": image ? new URL(image.src, Astro.site).toString() : undefined,
+		"datePublished": pubDate.toISOString(),
+		"dateModified": updatedDate ? updatedDate.toISOString() : pubDate.toISOString(),
+		"inLanguage": lang,
+		"url": canonicalURL.toString(),
+		"publisher": {
+			"@type": "Organization",
+			"name": siteTitle,
+			"url": Astro.site?.toString()
+		}
+	})} />
+)}
+
+<!-- Open Graph site_name -->
+<meta property="og:site_name" content={siteTitle} />
 
 <!-- AdSense placeholder: uncomment and replace with your publisher ID -->
 <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->

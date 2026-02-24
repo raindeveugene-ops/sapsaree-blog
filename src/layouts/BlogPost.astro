@@ -27,7 +27,7 @@ const translationUrl = translationSlug ? `/${otherLang}/blog/${translationSlug}/
 
 <html lang={lang}>
 	<head>
-		<BaseHead title={title} description={description} image={heroImage} lang={lang} />
+		<BaseHead title={title} description={description} image={heroImage} lang={lang} translationSlug={translationSlug} pubDate={pubDate} updatedDate={updatedDate} />
 		<style>
 			main {
 				width: calc(100% - 2em);
