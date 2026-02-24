@@ -6,6 +6,7 @@ tags: ['amsa-dong', 'prehistoric-site', 'toddler-outing', 'indoor-activity', 'mu
 category: parenting
 lang: en
 heroImage: '../../assets/amsa-fish-exhibit.jpg'
+translationSlug: 'amsa-prehistoric-site'
 ---
 
 # Amsa Prehistoric Site with an 18-Month-Old — Indoor Fun on a Cold Day

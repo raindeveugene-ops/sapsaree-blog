@@ -6,6 +6,7 @@ tags: ['yangpyeong', 'cafe', 'kids-friendly', 'namhan-river', 'gubyeoul']
 category: review
 lang: en
 heroImage: '../../assets/gubyeoul-kids-window.jpg'
+translationSlug: 'gubyeoul-cafe'
 ---
 
 # Gubyeoul Cafe in Yangpyeong — A Perfect Riverside Cafe for Families with Kids

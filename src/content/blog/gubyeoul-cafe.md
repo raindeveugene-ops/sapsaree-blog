@@ -6,6 +6,7 @@ tags: ['양평', '카페', '아이와카페', '남한강', '구벼울']
 category: review
 lang: ko
 heroImage: '../../assets/gubyeoul-kids-window.jpg'
+translationSlug: 'gubyeoul-cafe-en'
 ---
 
 # 양평 구벼울 — 아이와 함께 가기 좋은 남한강 뷰 카페

@@ -24,6 +24,6 @@ const prevPost = currentIndex < sameLangPosts.length - 1 ? sameLangPosts[current
 const nextPost = currentIndex > 0 ? sameLangPosts[currentIndex - 1] : null;
 ---
 
-<BlogPost {...post.data} lang={lang} tags={post.data.tags} prevPost={prevPost} nextPost={nextPost}>
+<BlogPost {...post.data} lang={lang} tags={post.data.tags} prevPost={prevPost} nextPost={nextPost} translationSlug={post.data.translationSlug}>
 	<Content />
 </BlogPost>

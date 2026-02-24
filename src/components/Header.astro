@@ -7,12 +7,13 @@ import ThemeToggle from './ThemeToggle.astro';
 
 interface Props {
 	lang?: Lang;
+	translationUrl?: string;
 }
 
-const { lang = 'ko' } = Astro.props;
+const { lang = 'ko', translationUrl } = Astro.props;
 const siteTitle = getSiteTitle(lang);
 const otherLang = getOtherLang(lang);
-const switchUrl = switchLangInUrl(Astro.url, otherLang);
+const switchUrl = translationUrl || switchLangInUrl(Astro.url, otherLang);
 ---
 
 <header>

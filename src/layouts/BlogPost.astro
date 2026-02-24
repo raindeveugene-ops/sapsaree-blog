@@ -17,9 +17,12 @@ type Props = CollectionEntry<'blog'>['data'] & {
 	tags?: string[];
 	prevPost?: CollectionEntry<'blog'> | null;
 	nextPost?: CollectionEntry<'blog'> | null;
+	translationSlug?: string;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, category, lang = 'ko', tags = [], prevPost, nextPost } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, category, lang = 'ko', tags = [], prevPost, nextPost, translationSlug } = Astro.props;
+const otherLang = lang === 'ko' ? 'en' : 'ko';
+const translationUrl = translationSlug ? `/${otherLang}/blog/${translationSlug}/` : undefined;
 ---
 
 <html lang={lang}>
@@ -96,7 +99,7 @@ const { title, description, pubDate, updatedDate, heroImage, category, lang = 'k
 	</head>
 
 	<body>
-		<Header {lang} />
+		<Header {lang} {translationUrl} />
 		<main>
 			<article>
 				<div class="hero-image">

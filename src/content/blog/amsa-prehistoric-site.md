@@ -6,6 +6,7 @@ tags: ['암사동', '선사유적지', '아기와나들이', '실내놀이', '�
 category: parenting
 lang: ko
 heroImage: '../../assets/amsa-fish-exhibit.jpg'
+translationSlug: 'amsa-prehistoric-site-en'
 ---
 
 # 18개월 아기와 암사동 선사유적지 — 추운 날에도 실내에서 즐겁게
