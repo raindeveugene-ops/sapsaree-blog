@@ -6,6 +6,7 @@ tags: ['청평', '펜션', '독채펜션', '북한강', '바베큐', '청평하�
 category: review
 lang: ko
 heroImage: '../../assets/cheongpyeonghada-garden.jpg'
+translationSlug: 'cheongpyeonghada-pension-en'
 ---
 
 # 청평하다 독채펜션 — 북한강뷰와 미슐랭급 바베큐, 이 조합은 반칙이다
