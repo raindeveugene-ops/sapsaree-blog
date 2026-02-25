@@ -33,6 +33,8 @@ The real showstopper is the **view**. Floor-to-ceiling windows in the living roo
 
 ## BBQ — The Owner's Skills Deserve a Michelin Star
 
+![BBQ over open flames — the owner grills everything himself](../../assets/cheongpyeonghada-bbq.jpg)
+
 Most pension BBQs mean grilling your own meat. Not here. **The owner grills everything for you.** And the skill level is no joke — timing, seasoning, heat control — all spot on. Honestly, if someone told me this was a Michelin one-star experience, I'd believe it.
 
 No effort required on your part. Just sit, eat, and enjoy. That alone is reason enough to come back.
