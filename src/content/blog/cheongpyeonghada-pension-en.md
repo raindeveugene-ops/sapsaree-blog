@@ -41,8 +41,9 @@ No effort required on your part. Just sit, eat, and enjoy. That alone is reason 
 
 ## Practical Info
 
-- **Location:** Cheongpyeong-myeon, Gapyeong-gun, Gyeonggi-do
+- **Address:** 2209 Bukhangang-ro, Cheongpyeong-myeon, Gapyeong-gun, Gyeonggi-do ([Naver Map](https://naver.me/FpXYnLE3))
 - **Type:** Private whole-house pension
+- **Booking:** Yeogi Eottae (여기어때) app, Instagram
 - **BBQ:** Grilled by the owner (not self-service)
 - **Best time to visit:** April–May, when moss phlox and cherry blossoms peak
 - **Great for:** Family gatherings, couples, anyone seeking quiet nature
