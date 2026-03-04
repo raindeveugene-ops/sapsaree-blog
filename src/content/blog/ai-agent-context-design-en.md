@@ -5,7 +5,7 @@ pubDate: 2026-03-04
 tags: ['AI', 'Claude', 'AI Agent', 'Developer Productivity', 'Context Design', 'Claude Code']
 category: tech
 lang: en
-heroImage: '../../assets/ai-agent-context-hero.jpg'
+heroImage: '../../assets/ai-agent-context-hero.png'
 translationSlug: 'ai-agent-context-design'
 ---
 
