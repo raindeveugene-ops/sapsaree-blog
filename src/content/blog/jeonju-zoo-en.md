@@ -1,5 +1,5 @@
 ---
-title: 'Jeonju Zoo — The Family Gem You'll Miss If You Only Visit Hanok Village'
+title: "Jeonju Zoo — The Family Gem You'll Miss If You Only Visit Hanok Village"
 description: 'Visiting Jeonju Zoo with an 18-month-old baby. Recently renovated, incredibly affordable, and home to tigers you can see up close. The highlight of our Jeonju family trip.'
 pubDate: 2026-03-04
 tags: ['Jeonju', 'JeonjuZoo', 'baby travel', 'family trip', 'Korea travel', 'zoo']
