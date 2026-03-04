@@ -5,6 +5,7 @@ pubDate: 2026-03-04
 tags: ['AI', 'Claude', 'AI에이전트', '개발생산성', '컨텍스트설계', 'ClaudeCode']
 category: tech
 lang: ko
+heroImage: '../../assets/ai-agent-context-hero.jpg'
 translationSlug: 'ai-agent-context-design-en'
 ---
 
